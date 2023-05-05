@@ -6,10 +6,12 @@ function Main({ socket }){
     const [todoList, setTodoList] = useState([]);
     const [Modal , setModal] = useState(false);
 
-    const toggleModal = (todoId) => {
-        socket.emit("viewComments" , todoId);
+    const toggleModal = (itemId) => {
+        socket.emit("viewComments" , itemId);
+        setSelectedItemId(itemId);
         setShowModal(!showModal);
     }
+    
     const generateID =() => Math.random().toString(36).substring(2,10);
 
     const handleAddTodo = (e) => {

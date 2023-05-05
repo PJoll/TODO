@@ -32,6 +32,15 @@ socketIO.on('connection', (socket) => {
             }
         }
     });
+    socket.on("updateComment", (data) => {
+        const {user, todoID, comment} = data;
+        for (let i=0; i<todoList.length; i++) {
+            if(todoID === todoList[i].id){
+                todoList[i].comments.push({name:user,text:comment});
+                socket.emit("commentsRecieved",todoList[i])
+            }
+        }
+    })
     socket.on('disconnect', () => {
       socket.disconnect()
       console.log('🔥: A user disconnected');
