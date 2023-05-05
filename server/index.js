@@ -16,9 +16,21 @@ let todoList = [];
 //👇🏻 Add this before the app.get() block
 socketIO.on('connection', (socket) => {
     console.log(`⚡: ${socket.id} user just connected!`);
+
     socket.on('addTodo', (todo) => {
         todoList.unshift(todo);
         socketIO.emit("todos", todoList);
+    });
+    socket.on("deleteTodo", (id) => {
+        todoList = todoList.filter((todo) => todo.id !== id);
+        socketIO.emit("todos", todoList);
+    });
+    socket.on("viewComments", (id) => {
+        for (let i=0; i<todoList.length; i++) {
+            if(id === todoList[i].id){
+                socketIO.emit("commentsRecieved",todoList[i])
+            }
+        }
     });
     socket.on('disconnect', () => {
       socket.disconnect()
